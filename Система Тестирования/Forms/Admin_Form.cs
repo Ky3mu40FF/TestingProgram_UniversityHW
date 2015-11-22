@@ -20,6 +20,7 @@ namespace Система_Тестирования
         SqlDataAdapter commonStudentsAdapter;
         SqlCommandBuilder commandBuilderCommonStudents;
 
+
         DataTable studentsTable;
         DataTable loginTable;
         DataTable questionsTable;
@@ -38,7 +39,7 @@ namespace Система_Тестирования
 
         public Admin_Form()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         public Admin_Form(SqlConnection connection)
