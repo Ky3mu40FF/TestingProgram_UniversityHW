@@ -400,7 +400,7 @@ namespace Система_Тестирования
                         answerOption.Tag = answersNums[i];
                         answerOption.AutoSize = true;
                         // Эксперимент. Нужно, чтобы при получении значений CheckBox'ы 
-                        // непришлось заново сортировать их для сравнения с правильными ответами
+                        // не пришлось заново сортировать их для сравнения с правильными ответами
                     // ПЕРЕФОРМУЛИРОВАТЬ ЭТОТ КОММЕНТАРИЙ!
                         answerOption.TabIndex = answersNums[i];
                         flowLayoutPanel1.Controls.Add(answerOption);

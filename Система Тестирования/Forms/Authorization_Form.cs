@@ -87,10 +87,11 @@ namespace Система_Тестирования
             {
                 // Это пригодится для проверки пароля с помощью MD5 хэша
                 /* 
-                string source = "Hello World!";
+                string sourcePassword = password_TextBox.Text;
+                
                 using (MD5 md5Hash = MD5.Create())
                 {
-                    string hash = GetMd5Hash(md5Hash, source);
+                    string hash = GetMd5Hash(md5Hash, sourcePassword);
 
                     if (VerifyMd5Hash(md5Hash, source, hash))
                     {
@@ -100,11 +101,16 @@ namespace Система_Тестирования
                     {
                         Console.WriteLine("The hashes are not same.");
                     }
+
                 }
                 */
 
                 connection = new SqlConnection(connectionString.ConnectionString);
                 connection.Open();
+
+                string sourcePassword = password_TextBox.Text;
+                MD5 md5Hash = MD5.Create();
+                string hash = GetMd5Hash(md5Hash, sourcePassword);
 
                 SqlCommand cmd = new SqlCommand(
                     "SELECT * " +
@@ -112,7 +118,8 @@ namespace Система_Тестирования
                     "WHERE " +
                     "Login.UserName = '" + name_TextBox.Text + "' " +
                     " AND " +
-                    "Login.Password = '" + password_TextBox.Text + "'", 
+                    //"Login.Password = '" + password_TextBox.Text + "'", 
+                    "Login.Password = '" + hash + "'",
                     connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (!reader.HasRows)
@@ -126,7 +133,7 @@ namespace Система_Тестирования
                     if(reader["Role"].ToString() == "Teacher")
                     {
                         MessageBox.Show("Вы вошли как администратор!");
-                        Admin_Form admin_Form = new Admin_Form();
+                        Admin_Form admin_Form = new Admin_Form(connection);
                         reader.Close();
                         admin_Form.Show();
                         this.Hide();
