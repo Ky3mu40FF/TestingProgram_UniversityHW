@@ -57,7 +57,7 @@ namespace Система_Тестирования
         {
             GetAllNecessaryTables();
 
-            dataGridView1.DataSource = commonStudentsTable;
+            dataGridView1.DataSource = studentsTable;
         }
 
         private void Admin_Form_Closing(object sender, FormClosingEventArgs e)
@@ -75,18 +75,46 @@ namespace Система_Тестирования
             }
         }
 
+        private void AddNewStudent_Button_Click(object sender, EventArgs e)
+        {
+            Add_Student_Form addStudentForm = new Add_Student_Form(ref studentsTable, 
+                                                                    ref loginTable, 
+                                                                    studentsAdapter, 
+                                                                    loginAdapter);
+            addStudentForm.Show();
+            this.Hide();
+        }
+
+        private void update_Button_Click(object sender, EventArgs e)
+        {
+            /*
+            try
+            {
+                studentsAdapter.Update(studentsTable);
+                loginAdapter.Update(loginTable);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            */
+            dataGridView1.Update();
+        }
+
         /*-------------------- Остальные функции --------------------*/
 
         private void Configure()
         {
             this.Load += new EventHandler(Admin_Form_Load);
             this.FormClosing += new FormClosingEventHandler(Admin_Form_Closing);
+            addNewStudent_Button.Click += new EventHandler(AddNewStudent_Button_Click);
         }
 
         private void GetAllNecessaryTables()
         {
             try
             {
+                /*
                 commonStudentsTable = new DataTable("Students");
                 commonStudentsAdapter = new SqlDataAdapter(
                     "SELECT * "+
@@ -95,8 +123,8 @@ namespace Система_Тестирования
                 commonStudentsAdapter.Fill(commonStudentsTable);
                 commandBuilderCommonStudents = new SqlCommandBuilder(commonStudentsAdapter);
                 commonStudentsAdapter.UpdateCommand = commandBuilderCommonStudents.GetUpdateCommand();
+                */
 
-                /*
                 studentsTable = new DataTable("Students");
                 loginTable = new DataTable("Login");
                 questionsTable = new DataTable("Questions");
@@ -125,13 +153,14 @@ namespace Система_Тестирования
                 loginAdapter.UpdateCommand = commandBuilderLogin.GetUpdateCommand();
                 questionsAdapter.UpdateCommand = commandBuilderQuestions.GetUpdateCommand();
                 answersAdapter.UpdateCommand = commandBuilderAnswers.GetUpdateCommand();
-                */
+
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
         }
+
 
     }
 }
