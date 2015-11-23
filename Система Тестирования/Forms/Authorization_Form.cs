@@ -169,6 +169,12 @@ namespace Система_Тестирования
 
         private void Configuration()
         {
+            // Устанавливаем кнопку приёма введённых данных с формы
+            // нажатие клавиши Enter эквивалентно нажатию этой кнопки
+            // т.е. теперь при вводе данных можно сразу нажать Enter, не фокусируясь на кнопке
+            // с помощью Tab или не выбирая её с помощью мыши
+            this.AcceptButton = logIn_Button;
+
             password_TextBox.UseSystemPasswordChar = true;
 
             logIn_Button.Click +=
