@@ -223,6 +223,8 @@ namespace Система_Тестирования
             start_Button.Click += new EventHandler(start_Button_Click);
             answer_Button.Click += new EventHandler(answer_Button_Click);
             next_Button.Click += new EventHandler(next_Button_Click);
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void GetInformationAboutCurrentStudent(Int32 id)
