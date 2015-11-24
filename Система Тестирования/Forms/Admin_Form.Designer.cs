@@ -30,6 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.editStudentsData_Button = new System.Windows.Forms.Button();
+            this.refreshTable_Button = new System.Windows.Forms.Button();
             this.addNewStudent_Button = new System.Windows.Forms.Button();
             this.update_Button = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -47,34 +49,54 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(908, 316);
+            this.tabControl1.Size = new System.Drawing.Size(908, 360);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.editStudentsData_Button);
+            this.tabPage1.Controls.Add(this.refreshTable_Button);
             this.tabPage1.Controls.Add(this.addNewStudent_Button);
             this.tabPage1.Controls.Add(this.update_Button);
             this.tabPage1.Controls.Add(this.dataGridView1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(900, 290);
+            this.tabPage1.Size = new System.Drawing.Size(900, 334);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Студенты";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // editStudentsData_Button
+            // 
+            this.editStudentsData_Button.Location = new System.Drawing.Point(3, 243);
+            this.editStudentsData_Button.Name = "editStudentsData_Button";
+            this.editStudentsData_Button.Size = new System.Drawing.Size(234, 23);
+            this.editStudentsData_Button.TabIndex = 4;
+            this.editStudentsData_Button.Text = "Редактировать данные о студенте";
+            this.editStudentsData_Button.UseVisualStyleBackColor = true;
+            // 
+            // refreshTable_Button
+            // 
+            this.refreshTable_Button.Location = new System.Drawing.Point(739, 214);
+            this.refreshTable_Button.Name = "refreshTable_Button";
+            this.refreshTable_Button.Size = new System.Drawing.Size(158, 23);
+            this.refreshTable_Button.TabIndex = 3;
+            this.refreshTable_Button.Text = "Обновить таблицу";
+            this.refreshTable_Button.UseVisualStyleBackColor = true;
+            // 
             // addNewStudent_Button
             // 
-            this.addNewStudent_Button.Location = new System.Drawing.Point(8, 159);
+            this.addNewStudent_Button.Location = new System.Drawing.Point(3, 214);
             this.addNewStudent_Button.Name = "addNewStudent_Button";
-            this.addNewStudent_Button.Size = new System.Drawing.Size(158, 23);
+            this.addNewStudent_Button.Size = new System.Drawing.Size(234, 23);
             this.addNewStudent_Button.TabIndex = 2;
             this.addNewStudent_Button.Text = "Добавить нового студента";
             this.addNewStudent_Button.UseVisualStyleBackColor = true;
             // 
             // update_Button
             // 
-            this.update_Button.Location = new System.Drawing.Point(8, 259);
+            this.update_Button.Location = new System.Drawing.Point(739, 264);
             this.update_Button.Name = "update_Button";
             this.update_Button.Size = new System.Drawing.Size(158, 23);
             this.update_Button.TabIndex = 1;
@@ -88,7 +110,7 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Top;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(894, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(894, 205);
             this.dataGridView1.TabIndex = 0;
             // 
             // tabPage2
@@ -96,16 +118,16 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(900, 290);
+            this.tabPage2.Size = new System.Drawing.Size(900, 334);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Вопросы";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Admin_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(908, 316);
+            this.ClientSize = new System.Drawing.Size(908, 360);
             this.Controls.Add(this.tabControl1);
             this.Name = "Admin_Form";
             this.Text = "Admin_Form";
@@ -124,5 +146,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button update_Button;
         private System.Windows.Forms.Button addNewStudent_Button;
+        private System.Windows.Forms.Button refreshTable_Button;
+        private System.Windows.Forms.Button editStudentsData_Button;
     }
 }

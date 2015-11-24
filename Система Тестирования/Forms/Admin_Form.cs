@@ -57,7 +57,7 @@ namespace Система_Тестирования
         {
             GetAllNecessaryTables();
 
-            dataGridView1.DataSource = studentsTable;
+            dataGridView1.DataSource = commonStudentsTable;
         }
 
         private void Admin_Form_Closing(object sender, FormClosingEventArgs e)
@@ -80,9 +80,36 @@ namespace Система_Тестирования
             Add_Student_Form addStudentForm = new Add_Student_Form(ref studentsTable, 
                                                                     ref loginTable, 
                                                                     studentsAdapter, 
-                                                                    loginAdapter);
+                                                                    loginAdapter,
+                                                                    this);
             addStudentForm.Show();
             this.Hide();
+        }
+
+        private void EditStudentsData_Button_Click(object sender, EventArgs e)
+        {
+            Edit_Students_Form editStudentsForm = new Edit_Students_Form(ref studentsTable,
+                                                                    ref loginTable,
+                                                                    studentsAdapter,
+                                                                    loginAdapter,
+                                                                    this);
+            editStudentsForm.Show();
+            this.Hide();
+        }
+
+        private void RefreshTable_Button_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                commonStudentsTable.Clear();
+                commonStudentsAdapter.Fill(commonStudentsTable);
+                dataGridView1.Refresh();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Не удалось обновить таблицу!\n\n"+ex.ToString(),
+                    "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void update_Button_Click(object sender, EventArgs e)
@@ -108,22 +135,24 @@ namespace Система_Тестирования
             this.Load += new EventHandler(Admin_Form_Load);
             this.FormClosing += new FormClosingEventHandler(Admin_Form_Closing);
             addNewStudent_Button.Click += new EventHandler(AddNewStudent_Button_Click);
+            editStudentsData_Button.Click += new EventHandler(EditStudentsData_Button_Click);
+            refreshTable_Button.Click += new EventHandler(RefreshTable_Button_Click);
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void GetAllNecessaryTables()
         {
             try
             {
-                /*
                 commonStudentsTable = new DataTable("Students");
                 commonStudentsAdapter = new SqlDataAdapter(
-                    "SELECT * "+
+                    "SELECT Students.LastName, Students.FirstName, Students.Patronymic, Students.Faculty, "+
+                        "Students.Speciality, Students.Course, Students.IsTestPassed, Students.Mark, Students.NumOfRetries, " +
+                        "Login.Username, Login.Password " +
                     "FROM Students INNER JOIN Login ON Students.Students_LoginFK = Login.LoginID",
                     connectionString);
                 commonStudentsAdapter.Fill(commonStudentsTable);
-                commandBuilderCommonStudents = new SqlCommandBuilder(commonStudentsAdapter);
-                commonStudentsAdapter.UpdateCommand = commandBuilderCommonStudents.GetUpdateCommand();
-                */
 
                 studentsTable = new DataTable("Students");
                 loginTable = new DataTable("Login");
