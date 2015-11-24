@@ -217,6 +217,8 @@ namespace Система_Тестирования
                 new EventHandler(refresh_Button_Click);
             next_Button.Click +=
                 new EventHandler(next_Button_Click);
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void ChangeStatus(Status status)
