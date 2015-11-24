@@ -21,6 +21,7 @@ namespace Система_Тестирования
         DataTable loginTable;
         SqlDataAdapter studentsAdapter;
         SqlDataAdapter loginAdapter;
+        Admin_Form adminForm;
 
         /*-------------------- Конструкторы --------------------*/
 
@@ -34,7 +35,8 @@ namespace Система_Тестирования
         public Add_Student_Form(ref DataTable students, 
                                 ref DataTable login, 
                                 SqlDataAdapter studentsAdapter, 
-                                SqlDataAdapter loginAdapter)
+                                SqlDataAdapter loginAdapter,
+                                Admin_Form adminForm)
         {
             InitializeComponent();
 
@@ -42,6 +44,7 @@ namespace Система_Тестирования
             this.loginTable = login;
             this.studentsAdapter = studentsAdapter;
             this.loginAdapter = loginAdapter;
+            this.adminForm = adminForm;
 
             Configure();
         }
@@ -56,6 +59,10 @@ namespace Система_Тестирования
             if (result == DialogResult.No)
             {
                 e.Cancel = true;
+            }
+            else
+            {
+                adminForm.Show();
             }
         }
 
@@ -74,15 +81,18 @@ namespace Система_Тестирования
                 Int32 newLoginID = Int32.Parse(loginTable.Rows[loginTable.Rows.Count - 1]["LoginID"].ToString()) + 1;
                 Int32 newStudentID = Int32.Parse(studentsTable.Rows[studentsTable.Rows.Count - 1]["StudentID"].ToString()) + 1;
 
+                /*
                 MD5 md5Hash = MD5.Create();
                 String passMD5Hash = md5_Functions.GetMd5Hash(md5Hash, password_TextBox.Text);
+                */
 
                 loginTable.Rows.Add(
                         new object[]
                         {
                         newLoginID,
                         nickname_TextBox.Text,
-                        passMD5Hash,
+                        //passMD5Hash,
+                        password_TextBox.Text,
                         "Student"
                         }
                     );
@@ -137,6 +147,8 @@ namespace Система_Тестирования
             faculty_ComboBox.SelectedIndexChanged += new EventHandler(Faculty_ComboBox_SelectedIndexChanged);
             addNewStudent_Button.Click += new EventHandler(AddNewStudent_Button_Click);
             back_Button.Click += new EventHandler(Back_Button_Click);
+
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             //faculty_ComboBox.SelectedIndex = 0;
         }
