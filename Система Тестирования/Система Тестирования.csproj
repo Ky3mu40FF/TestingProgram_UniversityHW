@@ -55,10 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\Add_Student_Form.cs">
+    <Compile Include="Forms\Edit_Students_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Add_Student_Form.Designer.cs">
+    <Compile Include="Forms\Edit_Students_Form.designer.cs">
+      <DependentUpon>Edit_Students_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StudentsEditingForms\Add_Student_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StudentsEditingForms\Add_Student_Form.Designer.cs">
       <DependentUpon>Add_Student_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Admin_Form.cs">
@@ -88,7 +94,10 @@
     <Compile Include="Forms\Student_Form.Designer.cs">
       <DependentUpon>Student_Form.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\Add_Student_Form.resx">
+    <EmbeddedResource Include="Forms\Edit_Students_Form.resx">
+      <DependentUpon>Edit_Students_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StudentsEditingForms\Add_Student_Form.resx">
       <DependentUpon>Add_Student_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Admin_Form.resx">
@@ -113,6 +122,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
