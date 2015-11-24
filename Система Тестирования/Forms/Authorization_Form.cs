@@ -108,9 +108,11 @@ namespace Система_Тестирования
                 connection = new SqlConnection(connectionString.ConnectionString);
                 connection.Open();
 
+                /*
                 string sourcePassword = password_TextBox.Text;
                 MD5 md5Hash = MD5.Create();
                 string hash = md5_Functions.GetMd5Hash(md5Hash, sourcePassword);
+                */
 
                 SqlCommand cmd = new SqlCommand(
                     "SELECT * " +
@@ -118,8 +120,8 @@ namespace Система_Тестирования
                     "WHERE " +
                     "Login.UserName = '" + name_TextBox.Text + "' " +
                     " AND " +
-                    //"Login.Password = '" + password_TextBox.Text + "'", 
-                    "Login.Password = '" + hash + "'",
+                    "Login.Password = '" + password_TextBox.Text + "'", 
+                    //"Login.Password = '" + hash + "'",
                     connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (!reader.HasRows)
@@ -181,6 +183,8 @@ namespace Система_Тестирования
                 new EventHandler(logIn_Button_Click);
             back_Button.Click +=
                 new EventHandler(back_Button_Click);
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
     }
 }
