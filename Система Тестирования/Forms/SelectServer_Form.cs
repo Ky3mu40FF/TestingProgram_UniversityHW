@@ -74,20 +74,32 @@ namespace Система_Тестирования
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
+            BackgroundWorker bW = sender as BackgroundWorker;
             db_Names = new List<string>();
                 foreach (Database database in server.Databases)
                 {
                     //availableDB_ListBox.Items.Add(database.Name);
                     db_Names.Add(database.Name);
                 }
+            if (bW.CancellationPending)
+            {
+                e.Cancel = true;
+                return;
+            }
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            BackgroundWorker bW = sender as BackgroundWorker;
             if (e.Error != null)
             {
                 ChangeStatus(Status.Error);
                 MessageBox.Show(e.Error.ToString(), "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (e != null && e.Cancelled)
+            {
+                bW.RunWorkerAsync();
+                return;
             }
             else
             {
@@ -99,6 +111,8 @@ namespace Система_Тестирования
 
         private void availableServers_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            availableDB_ListBox.DataSource = null;
+
             // Очищаем ListBox, содержащий доступные БД на выбранном сервере
             availableDB_ListBox.Items.Clear();
 
@@ -135,7 +149,14 @@ namespace Система_Тестирования
                 }
                 */
                 ChangeStatus(Status.SearchingDB);
-                backgroundWorker2.RunWorkerAsync();
+                if (!backgroundWorker2.IsBusy)
+                {
+                    backgroundWorker2.RunWorkerAsync();
+                }
+                else
+                {
+                    backgroundWorker2.CancelAsync();
+                }
             }
         }
 
@@ -163,6 +184,7 @@ namespace Система_Тестирования
         {
             ChangeStatus(Status.SearchingServers);
             availableServers_ListBox.Items.Clear();
+            availableDB_ListBox.DataSource = null;
             availableDB_ListBox.Items.Clear();
             next_Button.Enabled = false;
             backgroundWorker1.RunWorkerAsync();
@@ -217,6 +239,9 @@ namespace Система_Тестирования
                 new EventHandler(refresh_Button_Click);
             next_Button.Click +=
                 new EventHandler(next_Button_Click);
+
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
 
             this.StartPosition = FormStartPosition.CenterScreen;
         }
