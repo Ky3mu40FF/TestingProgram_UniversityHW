@@ -20,6 +20,9 @@ namespace Система_Тестирования
         SqlDataAdapter commonStudentsAdapter;
         SqlCommandBuilder commandBuilderCommonStudents;
 
+        DataTable commonQuestionsTable;
+        SqlDataAdapter commonQuestionsAdapter;
+        SqlCommandBuilder commandBuilderCommonQuestions;
 
         DataTable studentsTable;
         DataTable loginTable;
@@ -57,7 +60,8 @@ namespace Система_Тестирования
         {
             GetAllNecessaryTables();
 
-            dataGridView1.DataSource = commonStudentsTable;
+            Students_DataGridView.DataSource = commonStudentsTable;
+            Questions_DataGridView.DataSource = commonQuestionsTable;
         }
 
         private void Admin_Form_Closing(object sender, FormClosingEventArgs e)
@@ -97,17 +101,43 @@ namespace Система_Тестирования
             this.Hide();
         }
 
-        private void RefreshTable_Button_Click(object sender, EventArgs e)
+        private void EditQuestions_Button_Click(object sender, EventArgs e)
+        {
+            Edit_Questions_Form editQuestionsForm = new Edit_Questions_Form(ref questionsTable,
+                                                                    ref answersTable,
+                                                                    questionsAdapter,
+                                                                    answersAdapter,
+                                                                    this);
+            editQuestionsForm.Show();
+            this.Hide();
+        }
+
+        private void RefreshStudentsDataGrid_Button_Click(object sender, EventArgs e)
         {
             try
             {
                 commonStudentsTable.Clear();
                 commonStudentsAdapter.Fill(commonStudentsTable);
-                dataGridView1.Refresh();
+                Students_DataGridView.Refresh();
             }
             catch(Exception ex)
             {
                 MessageBox.Show("Не удалось обновить таблицу!\n\n"+ex.ToString(),
+                    "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void RefreshQuestionsDataGrid_Button_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                commonQuestionsTable.Clear();
+                commonQuestionsAdapter.Fill(commonQuestionsTable);
+                Questions_DataGridView.Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось обновить таблицу!\n\n" + ex.ToString(),
                     "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -125,7 +155,7 @@ namespace Система_Тестирования
                 MessageBox.Show(ex.ToString());
             }
             */
-            dataGridView1.Update();
+            Students_DataGridView.Update();
         }
 
         /*-------------------- Остальные функции --------------------*/
@@ -134,9 +164,11 @@ namespace Система_Тестирования
         {
             this.Load += new EventHandler(Admin_Form_Load);
             this.FormClosing += new FormClosingEventHandler(Admin_Form_Closing);
-            addNewStudent_Button.Click += new EventHandler(AddNewStudent_Button_Click);
+            //addNewStudent_Button.Click += new EventHandler(AddNewStudent_Button_Click);
             editStudentsData_Button.Click += new EventHandler(EditStudentsData_Button_Click);
-            refreshTable_Button.Click += new EventHandler(RefreshTable_Button_Click);
+            editQuestions_Button.Click += new EventHandler(EditQuestions_Button_Click);
+            refreshStudentsDataGrid_Button.Click += new EventHandler(RefreshStudentsDataGrid_Button_Click);
+            refreshQuestionsDataGrid_Button.Click += new EventHandler(RefreshQuestionsDataGrid_Button_Click);
 
             this.StartPosition = FormStartPosition.CenterScreen;
         }
@@ -153,6 +185,16 @@ namespace Система_Тестирования
                     "FROM Students INNER JOIN Login ON Students.Students_LoginFK = Login.LoginID",
                     connectionString);
                 commonStudentsAdapter.Fill(commonStudentsTable);
+
+                commonQuestionsTable = new DataTable("Questions");
+                commonQuestionsAdapter = new SqlDataAdapter(
+                    "SELECT Questions.QuestionNumber, Questions.QuestionContent, Questions.QuestionType, " +
+                        "Questions.CorrectAnswer, " +
+                        "Answers.Answer_1, Answers.Answer_2, Answers.Answer_3, Answers.Answer_4, " +
+                        "Answers.Answer_5, Answers.Answer_6, Answers.Answer_7, Answers.Answer_8 " +
+                    "FROM Questions INNER JOIN Answers ON Questions.Questions_AnswersFK = Answers.AnswersID",
+                    connectionString);
+                commonQuestionsAdapter.Fill(commonQuestionsTable);
 
                 studentsTable = new DataTable("Students");
                 loginTable = new DataTable("Login");
