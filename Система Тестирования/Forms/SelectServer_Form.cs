@@ -28,6 +28,8 @@ namespace Система_Тестирования
         Server server;
         List<String> db_Names;
 
+        DataTable tblDatabases;
+
 
         /*-------------------- Конструктор --------------------*/
 
@@ -74,17 +76,46 @@ namespace Система_Тестирования
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker bW = sender as BackgroundWorker;
-            db_Names = new List<string>();
+            try
+            {
+                BackgroundWorker bW = sender as BackgroundWorker;
+                /*
+                db_Names = new List<string>();
                 foreach (Database database in server.Databases)
                 {
                     //availableDB_ListBox.Items.Add(database.Name);
                     db_Names.Add(database.Name);
                 }
-            if (bW.CancellationPending)
+                */
+                db_Names = new List<string>();
+                //foreach (Database database in tblDatabases.Rows)
+                foreach (DataRow row in tblDatabases.Rows)
+                {
+                    //availableDB_ListBox.Items.Add(database.Name);
+                    //db_Names.Add(database.Name);
+
+                    //availableDB_ListBox.Items.Add(row[0].ToString());
+                    db_Names.Add(row[0].ToString());
+
+                    /*
+                    String items = "";
+                    for(Int32 i = 0; i < row.ItemArray.Length; i++)
+                    {
+                        items += " || " + i + " = " + row.ItemArray[i] + " || ";
+                    }
+                    MessageBox.Show(items);
+                    */
+                }
+
+                if (bW.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            catch(Exception ex)
             {
-                e.Cancel = true;
-                return;
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -111,52 +142,52 @@ namespace Система_Тестирования
 
         private void availableServers_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            availableDB_ListBox.DataSource = null;
-
-            // Очищаем ListBox, содержащий доступные БД на выбранном сервере
-            availableDB_ListBox.Items.Clear();
-
-            ChangeStatus(Status.SearchingDB);
-
-            if (availableServers_ListBox.SelectedIndex != -1)
+            try
             {
-                // Т.к. при смене сервера придётся снова выбирать БД, то отключаем кнопку "Далее",
-                // пока пользователь снова не выберет нужную БД
-                next_Button.Enabled = false;
+                availableDB_ListBox.DataSource = null;
 
-                // Получаем имя сервера
-                serverName = availableServers_ListBox.SelectedItem.ToString();
+                // Очищаем ListBox, содержащий доступные БД на выбранном сервере
+                availableDB_ListBox.Items.Clear();
 
-                // Создаём экземпляр Server и передаём ему имя выбранного сервера
-                server = new Server(serverName);
-                //Server server = new Server("192.168.1.34\\SQLEXPRESS");
-
-                // Пытаемся получить все базы данных, доступные на данном сервере
-                // и вывести их в ListBox
-                /*
-                try
-                {
-                    foreach (Database database in server.Databases)
-                    {
-                        availableDB_ListBox.Items.Add(database.Name);
-                    }
-                    ChangeStatus(Status.OK);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ChangeStatus(Status.Error);
-                }
-                */
                 ChangeStatus(Status.SearchingDB);
-                if (!backgroundWorker2.IsBusy)
+
+                if (availableServers_ListBox.SelectedIndex != -1)
                 {
-                    backgroundWorker2.RunWorkerAsync();
+                    // Т.к. при смене сервера придётся снова выбирать БД, то отключаем кнопку "Далее",
+                    // пока пользователь снова не выберет нужную БД
+                    next_Button.Enabled = false;
+
+                    // Получаем имя сервера
+                    serverName = availableServers_ListBox.SelectedItem.ToString();
+
+                    // Создаём экземпляр Server и передаём ему имя выбранного сервера
+                    server = new Server(serverName);
+
+                    connectionString = new SqlConnectionStringBuilder();
+                    connectionString.DataSource = serverName;
+                    connectionString.UserID = "Testing_System_Login";
+                    connectionString.Password = "1234";
+                    connectionString.IntegratedSecurity = false;
+                    String strConn = connectionString.ToString();
+                    SqlConnection sqlConn = new SqlConnection(strConn);
+                    sqlConn.Open();
+                    tblDatabases = sqlConn.GetSchema("Databases");
+                    sqlConn.Close();
+
+                    ChangeStatus(Status.SearchingDB);
+                    if (!backgroundWorker2.IsBusy)
+                    {
+                        backgroundWorker2.RunWorkerAsync();
+                    }
+                    else
+                    {
+                        backgroundWorker2.CancelAsync();
+                    }
                 }
-                else
-                {
-                    backgroundWorker2.CancelAsync();
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -170,10 +201,10 @@ namespace Система_Тестирования
 
         private void next_Button_Click(object sender, EventArgs e)
         {
-            connectionString = new SqlConnectionStringBuilder();
-            connectionString.DataSource = availableServers_ListBox.SelectedItem.ToString();
+            //connectionString = new SqlConnectionStringBuilder();
+            //connectionString.DataSource = availableServers_ListBox.SelectedItem.ToString();
             connectionString.InitialCatalog = availableDB_ListBox.SelectedItem.ToString();
-            connectionString.IntegratedSecurity = true;
+            //connectionString.IntegratedSecurity = false;
 
             Authorization_Form authForm = new Authorization_Form(connectionString, this);
             this.Hide();
