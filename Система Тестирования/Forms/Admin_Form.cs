@@ -96,7 +96,8 @@ namespace Система_Тестирования
                                                                     ref loginTable,
                                                                     studentsAdapter,
                                                                     loginAdapter,
-                                                                    this);
+                                                                    this,
+                                                                    connectionString);
             editStudentsForm.Show();
             this.Hide();
         }
@@ -107,7 +108,8 @@ namespace Система_Тестирования
                                                                     ref answersTable,
                                                                     questionsAdapter,
                                                                     answersAdapter,
-                                                                    this);
+                                                                    this,
+                                                                    connectionString);
             editQuestionsForm.Show();
             this.Hide();
         }
