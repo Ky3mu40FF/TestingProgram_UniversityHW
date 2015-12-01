@@ -34,6 +34,9 @@ namespace Система_Тестирования
         DataRow currentQuestionRow;
         DataRow currentAnswersRow;
 
+        TextBox[] dataTextBoxes;
+        ComboBox[] dataComboBoxes;
+
         // Перечисление, указывающее режим работы второй формы 
         // (Редактирование записей, Поиск записей, Просмотр записей)
         enum WorkMode
@@ -60,7 +63,8 @@ namespace Система_Тестирования
                                 ref DataTable answers,
                                 SqlDataAdapter questionsAdapter,
                                 SqlDataAdapter answersAdapter,
-                                Admin_Form adminForm)
+                                Admin_Form adminForm,
+                                SqlConnection connection)
         {
             InitializeComponent();
 
@@ -69,6 +73,7 @@ namespace Система_Тестирования
             this.questionsAdapter = questionsAdapter;
             this.answersAdapter = answersAdapter;
             this.adminForm = adminForm;
+            this.connection = connection;
 
             // Инициализация остальных компонентов
             MyComponentsInitialization();
@@ -381,11 +386,105 @@ namespace Система_Тестирования
 
         private void button_StartSearch_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Заглушка");
+            String conditions = "";
+
+            foreach (TextBox tB in dataTextBoxes)
+            {
+                String tableName = tB.Tag.ToString().Substring(0, tB.Tag.ToString().IndexOf('.'));
+                String columnName = tB.Tag.ToString().Substring(tB.Tag.ToString().LastIndexOf('.') + 1);
+                if (tB.Text == null || tB.Text == "")
+                    continue;
+                if (tableName == "Questions")
+                {
+                    if (questionsTable.Columns[columnName].DataType.ToString() == "System.String"
+                        |
+                        questionsTable.Columns[columnName].DataType.ToString() == "System.Char")
+                        conditions += tB.Tag.ToString() + " LIKE '" + tB.Text + "'" + " AND ";
+                    // В других случаях оставляем как есть и сравниваем через "="
+                    else
+                        conditions += tB.Tag.ToString() + " = " + tB.Text.Replace(',', '.') + " AND ";
+                }
+                else if (tableName == "Answers")
+                {
+                    {
+                        if (answersTable.Columns[columnName].DataType.ToString() == "System.String"
+                            |
+                            answersTable.Columns[columnName].DataType.ToString() == "System.Char")
+                            conditions += tB.Tag.ToString() + " LIKE '" + tB.Text + "'" + " AND ";
+                        // В других случаях оставляем как есть и сравниваем через "="
+                        else
+                            conditions += tB.Tag.ToString() + " = " + tB.Text.Replace(',', '.') + " AND ";
+                    }
+                }
+            }
+            foreach (ComboBox cB in dataComboBoxes)
+            {
+                String tableName = cB.Tag.ToString().Substring(0, cB.Tag.ToString().IndexOf('.'));
+                String columnName = cB.Tag.ToString().Substring(cB.Tag.ToString().LastIndexOf('.') + 1);
+                if (cB.Text == null || cB.Text == "")
+                    continue;
+                if (tableName == "Questions")
+                {
+                    if (questionsTable.Columns[columnName].DataType.ToString() == "System.String"
+                        |
+                        questionsTable.Columns[columnName].DataType.ToString() == "System.Char")
+                        conditions += cB.Tag.ToString() + " LIKE '" + cB.Text + "'" + " AND ";
+                    // В других случаях оставляем как есть и сравниваем через "="
+                    else
+                        conditions += cB.Tag.ToString() + " = " + cB.Text.Replace(',', '.') + " AND ";
+                }
+                else if (tableName == "Answers")
+                {
+                    {
+                        if (answersTable.Columns[columnName].DataType.ToString() == "System.String"
+                            |
+                            answersTable.Columns[columnName].DataType.ToString() == "System.Char")
+                            conditions += cB.Tag.ToString() + " LIKE '" + cB.Text + "'" + " AND ";
+                        // В других случаях оставляем как есть и сравниваем через "="
+                        else
+                            conditions += cB.Tag.ToString() + " = " + cB.Text.Replace(',', '.') + " AND ";
+                    }
+                }
+            }
+
+            // Символы, которые нужно удалить с конца строки-условия ("AND ")
+            Char[] charsToTrim = { 'A', 'N', 'D', ' ' };
+            // Удаляем из конца ("AND ")
+            conditions = conditions.TrimEnd(charsToTrim);
+
+            DataTable searchResultTable = new DataTable();
+            SqlCommand searchCommand = new SqlCommand(
+                "SELECT Questions.QuestionsID, Questions.QuestionContent, Questions.QuestionType, " +
+                        "Questions.CorrectAnswer, " +
+                        "Answers.Answer_1, Answers.Answer_2, Answers.Answer_3, Answers.Answer_4, " +
+                        "Answers.Answer_5, Answers.Answer_6, Answers.Answer_7, Answers.Answer_8 " +
+                " FROM Questions INNER JOIN Answers ON Questions.Questions_AnswersFK = Answers.AnswersID" +
+                " WHERE " + conditions, connection);
+            SqlDataAdapter searchResultAdapter = new SqlDataAdapter(searchCommand.CommandText, connection);
+
+            searchResultAdapter.Fill(searchResultTable);
+            // Следующие 3 строки:
+            // В таблице указывается поле, которое является первичным ключом 
+            DataColumn[] keyColumn = new DataColumn[1];
+            keyColumn[0] = questionsTable.Columns[questionsTable.TableName + "ID"];
+            questionsTable.PrimaryKey = keyColumn;
+
+            foundedRowsIndexes = new Int32[searchResultTable.Rows.Count];
+            for (Int32 i = 0; i < searchResultTable.Rows.Count; i++)
+                foundedRowsIndexes[i] = questionsTable.Rows.IndexOf(questionsTable.Rows.Find(searchResultTable.Rows[i][0]));
+            // Записываем в настройки, что мы в режиме поиска 
+            // (нужно, чтобы с помощью ToolStrip можно было перемещаться по результатам поиска)
+            Properties.Settings.Default.IsSearching = true;
+            currentFoundedIndex = 0;
 
             Button thisButton = sender as Button;
             thisButton.Enabled = false;
             button7.Enabled = true;
+
+            MessageBox.Show("Найдено записей: " + foundedRowsIndexes.Length.ToString());
+
+            rowIndex = foundedRowsIndexes[currentFoundedIndex];
+            OutputDataToForm(rowIndex);
         }
 
         private void button_StopSearch_Click(object sender, EventArgs e)
@@ -410,14 +509,16 @@ namespace Система_Тестирования
             }
             else
             {
-                rowIndex = foundedRowsIndexes[0];
+                //rowIndex = foundedRowsIndexes[0];
+                currentFoundedIndex = 0;
+                rowIndex = foundedRowsIndexes[currentFoundedIndex];
                 OutputDataToForm(rowIndex);
             }
         }
         // Нажатие на кнопку перехода К предыдущей записи 
         private void toolStrip_Previous_Button_Click(object sender, EventArgs e)
         {
-            if(!Properties.Settings.Default.IsSearching)
+            if (!Properties.Settings.Default.IsSearching)
                 OutputDataToForm(--rowIndex);
             else
             {
@@ -462,7 +563,9 @@ namespace Система_Тестирования
             }
             else
             {
-                rowIndex = foundedRowsIndexes.Length - 1;
+                //rowIndex = foundedRowsIndexes.Length - 1;
+                currentFoundedIndex = foundedRowsIndexes.Length - 1;
+                rowIndex = foundedRowsIndexes[currentFoundedIndex];
                 OutputDataToForm(rowIndex);
             }
         }
@@ -670,6 +773,12 @@ namespace Система_Тестирования
             answer_6_TextBox.Tag = "Answers.Answer_6";
             answer_7_TextBox.Tag = "Answers.Answer_7";
             answer_8_TextBox.Tag = "Answers.Answer_8";
+
+            dataTextBoxes = new TextBox[] 
+                {questionContent_TextBox, correctAnswer_TextBox,
+                    answer_1_TextBox, answer_2_TextBox, answer_3_TextBox, answer_4_TextBox,
+                    answer_5_TextBox, answer_6_TextBox, answer_7_TextBox, answer_8_TextBox};
+            dataComboBoxes = new ComboBox[] {questionType_ComboBox, answersCount_ComboBox};
 
             questionType_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             answersCount_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
