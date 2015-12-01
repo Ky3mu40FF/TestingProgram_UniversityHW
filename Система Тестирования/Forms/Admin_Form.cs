@@ -71,7 +71,7 @@ namespace Система_Тестирования
                 "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if (result == DialogResult.Yes)
             {
-                Application.Exit();
+                Environment.Exit(0);
             }
             else
             {
