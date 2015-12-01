@@ -85,26 +85,6 @@ namespace Система_Тестирования
         {
             try
             {
-                // Это пригодится для проверки пароля с помощью MD5 хэша
-                /* 
-                string sourcePassword = password_TextBox.Text;
-                
-                using (MD5 md5Hash = MD5.Create())
-                {
-                    string hash = GetMd5Hash(md5Hash, sourcePassword);
-
-                    if (VerifyMd5Hash(md5Hash, source, hash))
-                    {
-                        Console.WriteLine("The hashes are the same.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("The hashes are not same.");
-                    }
-
-                }
-                */
-
                 connection = new SqlConnection(connectionString.ConnectionString);
                 connection.Open();
 
