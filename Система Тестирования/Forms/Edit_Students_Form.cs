@@ -32,6 +32,9 @@ namespace Система_Тестирования
         DataRow currentStudentsRow;
         DataRow currentLoginRow;
 
+        TextBox[] dataTextBoxes;
+        ComboBox[] dataComboBoxes;
+
         // Перечисление, указывающее режим работы второй формы 
         // (Редактирование записей, Поиск записей, Просмотр записей)
         enum WorkMode
@@ -58,7 +61,8 @@ namespace Система_Тестирования
                                 ref DataTable login,
                                 SqlDataAdapter studentsAdapter,
                                 SqlDataAdapter loginAdapter,
-                                Admin_Form adminForm)
+                                Admin_Form adminForm,
+                                SqlConnection connection)
         {
             InitializeComponent();
 
@@ -67,6 +71,7 @@ namespace Система_Тестирования
             this.studentsAdapter = studentsAdapter;
             this.loginAdapter = loginAdapter;
             this.adminForm = adminForm;
+            this.connection = connection;
 
             // Инициализация остальных компонентов
             MyComponentsInitialization();
@@ -204,7 +209,7 @@ namespace Система_Тестирования
             try
             {
                 lastIdInStudentsTable = studentsTable.AsEnumerable()
-                    .Select(x => x.Field<Int32>("StudentID"))
+                    .Select(x => x.Field<Int32>("StudentsID"))
                     .DefaultIfEmpty(1)
                     .Max(x => x);
                 lastIdInLoginTable = loginTable.AsEnumerable()
@@ -322,7 +327,7 @@ namespace Система_Тестирования
 
                 studentsTable.Rows[rowIndex].ItemArray = new object[]
                         {
-                        studentsTable.Rows[rowIndex]["StudentID"],         // Остаётся, как было
+                        studentsTable.Rows[rowIndex]["StudentsID"],         // Остаётся, как было
                         lastName_TextBox.Text,
                         firstName_TextBox.Text,
                         patronymic_TextBox.Text,
@@ -375,11 +380,71 @@ namespace Система_Тестирования
 
         private void button_StartSearch_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Заглушка");
+            String conditions = "";
+
+            foreach (TextBox tB in dataTextBoxes)
+            {
+                String columnName = tB.Tag.ToString().Substring(tB.Tag.ToString().LastIndexOf('.') + 1);
+                if (tB.Text == null || tB.Text == "")
+                    continue;
+                if (studentsTable.Columns[columnName].DataType.ToString() == "System.String" 
+                    | 
+                    studentsTable.Columns[columnName].DataType.ToString() == "System.Char")
+                    conditions += tB.Tag.ToString() + " LIKE '" + tB.Text + "'" + " AND ";
+                // В других случаях оставляем как есть и сравниваем через "="
+                else
+                    conditions += tB.Tag.ToString() + " = " + tB.Text.Replace(',', '.') + " AND ";
+            }
+            foreach (ComboBox cB in dataComboBoxes)
+            {
+                String columnName = cB.Tag.ToString().Substring(cB.Tag.ToString().LastIndexOf('.') + 1);
+                if (cB.Text == null || cB.Text == "")
+                    continue;
+                if (studentsTable.Columns[columnName].DataType.ToString() == "System.String"
+                    |
+                    studentsTable.Columns[columnName].DataType.ToString() == "System.Char")
+                    conditions += cB.Tag.ToString() + " LIKE '" + cB.Text + "'" + " AND ";
+                // В других случаях оставляем как есть и сравниваем через "="
+                else
+                    conditions += cB.Tag.ToString() + " = " + cB.Text.Replace(',', '.') + " AND ";
+            }
+
+            // Символы, которые нужно удалить с конца строки-условия ("AND ")
+            Char[] charsToTrim = { 'A', 'N', 'D', ' ' };
+            // Удаляем из конца ("AND ")
+            conditions = conditions.TrimEnd(charsToTrim);
+
+            DataTable searchResultTable = new DataTable();
+            SqlCommand searchCommand = new SqlCommand(
+                "SELECT "+ "Students.StudentsID, Students.LastName, Students.FirstName, Students.Patronymic, Students.Faculty, " +
+                        "Students.Speciality, Students.Course, Login.Username, Login.Password" +
+                " FROM Students INNER JOIN Login ON Students.Students_LoginFK = Login.LoginID " +
+                " WHERE " + conditions, connection);
+            SqlDataAdapter searchResultAdapter = new SqlDataAdapter(searchCommand.CommandText, connection);
+
+            searchResultAdapter.Fill(searchResultTable);
+            // Следующие 3 строки:
+            // В таблице указывается поле, которое является первичным ключом 
+            DataColumn[] keyColumn = new DataColumn[1];
+            keyColumn[0] = studentsTable.Columns[studentsTable.TableName + "ID"];
+            studentsTable.PrimaryKey = keyColumn;
+
+            foundedRowsIndexes = new Int32[searchResultTable.Rows.Count];
+            for (Int32 i = 0; i < searchResultTable.Rows.Count; i++)
+                foundedRowsIndexes[i] = studentsTable.Rows.IndexOf(studentsTable.Rows.Find(searchResultTable.Rows[i][0]));
+            // Записываем в настройки, что мы в режиме поиска 
+            // (нужно, чтобы с помощью ToolStrip можно было перемещаться по результатам поиска)
+            Properties.Settings.Default.IsSearching = true;
+            currentFoundedIndex = 0;
 
             Button thisButton = sender as Button;
             thisButton.Enabled = false;
             button7.Enabled = true;
+
+            MessageBox.Show("Найдено записей: " + foundedRowsIndexes.Length.ToString());
+
+            rowIndex = foundedRowsIndexes[currentFoundedIndex];
+            OutputDataToForm(rowIndex);
         }
 
         private void button_StopSearch_Click(object sender, EventArgs e)
@@ -404,7 +469,9 @@ namespace Система_Тестирования
             }
             else
             {
-                rowIndex = foundedRowsIndexes[0];
+                //rowIndex = foundedRowsIndexes[0];
+                currentFoundedIndex = 0;
+                rowIndex = foundedRowsIndexes[currentFoundedIndex];
                 OutputDataToForm(rowIndex);
             }
         }
@@ -456,7 +523,9 @@ namespace Система_Тестирования
             }
             else
             {
-                rowIndex = foundedRowsIndexes.Length - 1;
+                //rowIndex = foundedRowsIndexes.Length - 1;
+                currentFoundedIndex = foundedRowsIndexes.Length - 1;
+                rowIndex = foundedRowsIndexes[currentFoundedIndex];
                 OutputDataToForm(rowIndex);
             }
         }
@@ -604,6 +673,8 @@ namespace Система_Тестирования
             course_ComboBox.Tag = "Students.Course";
             nickname_TextBox.Tag = "Login.Username";
             password_TextBox.Tag = "Login.Password";
+            dataTextBoxes = new TextBox[] { lastName_TextBox, firstName_TextBox, patronymic_TextBox};
+            dataComboBoxes = new ComboBox[] { faculty_ComboBox, speciality_ComboBox, course_ComboBox};
 
             // Устанавливаем границы изменения размеров формы (ширина постоянная, а высота меняется)
             this.MinimumSize = new Size(this.Width, 500);
