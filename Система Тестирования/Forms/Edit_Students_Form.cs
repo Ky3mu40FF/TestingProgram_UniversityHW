@@ -360,8 +360,8 @@ namespace Система_Тестирования
             {
                 loginTable.Rows[rowIndex].Delete();
                 studentsTable.Rows[rowIndex].Delete();
-                loginAdapter.Update(loginTable);
                 studentsAdapter.Update(studentsTable);
+                loginAdapter.Update(loginTable);
 
                 MessageBox.Show("Студент удалён из базы данных!", 
                     "Успех!", 
