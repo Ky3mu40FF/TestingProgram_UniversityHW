@@ -366,8 +366,8 @@ namespace Система_Тестирования
             {
                 answersTable.Rows[rowIndex].Delete();
                 questionsTable.Rows[rowIndex].Delete();
-                answersAdapter.Update(answersTable);
                 questionsAdapter.Update(questionsTable);
+                answersAdapter.Update(answersTable);
 
                 MessageBox.Show("Вопрос удалён из базы данных!", 
                     "Успех!", 
