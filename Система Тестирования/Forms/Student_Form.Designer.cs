@@ -35,7 +35,6 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.next_Button = new System.Windows.Forms.Button();
-            this.back_Button = new System.Windows.Forms.Button();
             this.answer_Button = new System.Windows.Forms.Button();
             this.firstPanel = new System.Windows.Forms.Panel();
             this.exit_Button = new System.Windows.Forms.Button();
@@ -137,15 +136,6 @@
             this.next_Button.TabIndex = 2;
             this.next_Button.Text = "Дальше";
             this.next_Button.UseVisualStyleBackColor = true;
-            // 
-            // back_Button
-            // 
-            this.back_Button.Location = new System.Drawing.Point(12, 296);
-            this.back_Button.Name = "back_Button";
-            this.back_Button.Size = new System.Drawing.Size(75, 23);
-            this.back_Button.TabIndex = 3;
-            this.back_Button.Text = "Назад";
-            this.back_Button.UseVisualStyleBackColor = true;
             // 
             // answer_Button
             // 
@@ -378,7 +368,6 @@
             this.ClientSize = new System.Drawing.Size(691, 339);
             this.Controls.Add(this.firstPanel);
             this.Controls.Add(this.answer_Button);
-            this.Controls.Add(this.back_Button);
             this.Controls.Add(this.next_Button);
             this.Controls.Add(this.answersPanel);
             this.Controls.Add(this.questionPanel);
@@ -405,7 +394,6 @@
         private System.Windows.Forms.Panel answersPanel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button next_Button;
-        private System.Windows.Forms.Button back_Button;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button answer_Button;
         private System.Windows.Forms.Panel firstPanel;
