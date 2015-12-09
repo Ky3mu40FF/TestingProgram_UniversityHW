@@ -36,10 +36,11 @@
             this.refresh_Button = new System.Windows.Forms.Button();
             this.exit_Button = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.showSelectServer_CheckBox = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -120,15 +121,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Состояние";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(239, 16);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -139,11 +131,31 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
+            // showSelectServer_CheckBox
+            // 
+            this.showSelectServer_CheckBox.BackColor = System.Drawing.SystemColors.Control;
+            this.showSelectServer_CheckBox.Location = new System.Drawing.Point(295, 196);
+            this.showSelectServer_CheckBox.Name = "showSelectServer_CheckBox";
+            this.showSelectServer_CheckBox.Size = new System.Drawing.Size(164, 30);
+            this.showSelectServer_CheckBox.TabIndex = 6;
+            this.showSelectServer_CheckBox.Text = "Выводить в следующий раз окно выбора сервера?";
+            this.showSelectServer_CheckBox.UseVisualStyleBackColor = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(239, 16);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
+            // 
             // SelectServer_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 234);
+            this.Controls.Add(this.showSelectServer_CheckBox);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.exit_Button);
             this.Controls.Add(this.refresh_Button);
@@ -175,6 +187,7 @@
         private System.Windows.Forms.Label label1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.CheckBox showSelectServer_CheckBox;
     }
 }
 

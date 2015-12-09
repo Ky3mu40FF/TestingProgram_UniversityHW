@@ -31,10 +31,29 @@ namespace Система_Тестирования
         DataTable tblDatabases;
 
 
+
+
         /*-------------------- Конструктор --------------------*/
 
         public SelectServer_Form()
         {
+            if(!Properties.Settings.Default.ShowSelectServer)
+            {
+                DialogResult result;
+                result = MessageBox.Show("Вы хотите заново выбрать сервер?", 
+                    "Внимание!", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question, 
+                    MessageBoxDefaultButton.Button2);
+                if(result == DialogResult.No)
+                {
+                    Authorization_Form authForm = 
+                        new Authorization_Form(Properties.Settings.Default.ServerConnectionString, this);
+                    this.Hide();
+                    authForm.ShowDialog();
+                } 
+            }
+
             InitializeComponent();
 
             Configuration();
@@ -47,6 +66,21 @@ namespace Система_Тестирования
 
 
         /*-------------------- Делегаты --------------------*/
+
+        private void SelectServer_Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result;
+            result = MessageBox.Show("Вы уверены, что хотите выйти?",
+                "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            if (result == DialogResult.Yes)
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
 
         private void SelectServer_Form_Loading(object sender, EventArgs e)
         {
@@ -165,14 +199,27 @@ namespace Система_Тестирования
 
                     connectionString = new SqlConnectionStringBuilder();
                     connectionString.DataSource = serverName;
-                    connectionString.UserID = "Testing_System_Login";
-                    connectionString.Password = "1234";
+                    //connectionString.UserID = "Testing_System_Login";
+                    //connectionString.Password = "1234";
                     connectionString.IntegratedSecurity = false;
+
+                    tblDatabases = new DataTable();
+                    ServerMainUserAuth serverMainUserAuth = 
+                        new ServerMainUserAuth(ref connectionString, this, ref tblDatabases);
+                    serverMainUserAuth.ShowDialog();
+
+                    if(connectionString.UserID == "" || connectionString.Password == "")
+                    {
+                        return;
+                    }
+
+                    
                     String strConn = connectionString.ToString();
                     SqlConnection sqlConn = new SqlConnection(strConn);
                     sqlConn.Open();
                     tblDatabases = sqlConn.GetSchema("Databases");
                     sqlConn.Close();
+                    
 
                     ChangeStatus(Status.SearchingDB);
                     if (!backgroundWorker2.IsBusy)
@@ -205,6 +252,11 @@ namespace Система_Тестирования
             //connectionString.DataSource = availableServers_ListBox.SelectedItem.ToString();
             connectionString.InitialCatalog = availableDB_ListBox.SelectedItem.ToString();
             //connectionString.IntegratedSecurity = false;
+
+            //Properties.Settings.Default.ServerConnectionString = connectionString;
+            Properties.Settings.Default.ServerConnectionString = connectionString.ConnectionString;
+            Properties.Settings.Default.ShowSelectServer = showSelectServer_CheckBox.Checked;
+            Properties.Settings.Default.Save();
 
             Authorization_Form authForm = new Authorization_Form(connectionString, this);
             this.Hide();
@@ -250,6 +302,8 @@ namespace Система_Тестирования
             next_Button.Enabled = false;
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
 
+            this.FormClosing +=
+                new FormClosingEventHandler(SelectServer_Form_Closing);
             this.Load += 
                 new EventHandler(SelectServer_Form_Loading);
             backgroundWorker1.DoWork += 
