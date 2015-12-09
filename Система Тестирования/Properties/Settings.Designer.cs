@@ -70,5 +70,29 @@ namespace Система_Тестирования.Properties {
                 this["IsSearching"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerConnectionString {
+            get {
+                return ((string)(this["ServerConnectionString"]));
+            }
+            set {
+                this["ServerConnectionString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowSelectServer {
+            get {
+                return ((bool)(this["ShowSelectServer"]));
+            }
+            set {
+                this["ShowSelectServer"] = value;
+            }
+        }
     }
 }
