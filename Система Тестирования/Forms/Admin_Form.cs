@@ -86,8 +86,8 @@ namespace Система_Тестирования
                                                                     studentsAdapter, 
                                                                     loginAdapter,
                                                                     this);
-            addStudentForm.Show();
-            this.Hide();
+            addStudentForm.ShowDialog();
+            //this.Hide();
         }
 
         private void EditStudentsData_Button_Click(object sender, EventArgs e)
@@ -98,8 +98,8 @@ namespace Система_Тестирования
                                                                     loginAdapter,
                                                                     this,
                                                                     connectionString);
-            editStudentsForm.Show();
-            this.Hide();
+            editStudentsForm.ShowDialog();
+            //this.Hide();
         }
 
         private void EditQuestions_Button_Click(object sender, EventArgs e)
@@ -110,8 +110,8 @@ namespace Система_Тестирования
                                                                     answersAdapter,
                                                                     this,
                                                                     connectionString);
-            editQuestionsForm.Show();
-            this.Hide();
+            editQuestionsForm.ShowDialog();
+            //this.Hide();
         }
 
         private void RefreshStudentsDataGrid_Button_Click(object sender, EventArgs e)
