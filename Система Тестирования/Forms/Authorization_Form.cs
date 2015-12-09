@@ -19,6 +19,7 @@ namespace Система_Тестирования
 
         SqlConnectionStringBuilder connectionString;
         SqlConnection connection;
+        String connectionStr;
 
         SelectServer_Form selectServer_Form;
 
@@ -40,52 +41,37 @@ namespace Система_Тестирования
             Configuration();
         }
 
+        public Authorization_Form(String con, SelectServer_Form selectServer_Form)
+        {
+            InitializeComponent();
+            this.connectionStr = con;
+            this.selectServer_Form = selectServer_Form;
+            Configuration();
+        }
 
         /*-------------------- Делегаты --------------------*/
-        /*
-        private void logIn_Button_Click(object sender, EventArgs e)
-        {
-            connectionString.UserID = name_TextBox.Text;
-            connectionString.Password = password_TextBox.Text;
-            Server server = new Server(connectionString.DataSource);
-            Database dB = new Database(server, connectionString.InitialCatalog.ToString());
-            try
-            {                
-                connection = new SqlConnection(connectionString.ConnectionString);
-                connection.Open();
-                currentUser = new User(dB, connectionString.UserID);
-                
-                //MessageBox.Show(currentUser.EnumRoles()[0].ToString());
-                //MessageBox.Show("Вы вошли в систему!", "Успех!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
-                if(currentUser.EnumRoles()[0] == "db_owner")
-                {
-                    MessageBox.Show("Вы вошли как администратор!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.None);
-                    Admin_Form admin_Form = new Admin_Form();
-                    this.Hide();
-                    admin_Form.Show();
-                    //selectServer_Form.Close();
-                    //this.Close();
-                    
-                }
-                else if (currentUser.EnumRoles()[0] == "db_datawriter")
-                {
-                    MessageBox.Show("Вы вошли как студент!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.None);
-                }
 
-            }
-            catch (Exception ex)
+        private void Authorization_Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result;
+            result = MessageBox.Show("Вы уверены, что хотите выйти?",
+                "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            if (result == DialogResult.Yes)
             {
-                MessageBox.Show(ex.ToString(), "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
+            else
+            {
+                e.Cancel = true;
             }
         }
-        */
 
         private void logIn_Button_Click(object sender, EventArgs e)
         {
             try
             {
-                connection = new SqlConnection(connectionString.ConnectionString);
+                //connection = new SqlConnection(connectionString.ConnectionString);
+                connection = new SqlConnection(Properties.Settings.Default.ServerConnectionString);
                 connection.Open();
 
                 /*
@@ -117,7 +103,7 @@ namespace Система_Тестирования
                         MessageBox.Show("Вы вошли как администратор!");
                         Admin_Form admin_Form = new Admin_Form(connection);
                         reader.Close();
-                        admin_Form.Show();
+                        admin_Form.ShowDialog();
                         this.Hide();
                         return;
                     }
@@ -126,7 +112,7 @@ namespace Система_Тестирования
                         MessageBox.Show("Вы вошли как студент!");
                         Student_Form student_Form = new Student_Form(connection, (Int32)reader["LoginID"]);
                         reader.Close();
-                        student_Form.Show();
+                        student_Form.ShowDialog();
                         this.Hide();
                         return;
                     }
@@ -159,6 +145,8 @@ namespace Система_Тестирования
 
             password_TextBox.UseSystemPasswordChar = true;
 
+            this.FormClosing +=
+                new FormClosingEventHandler(Authorization_Form_Closing);
             logIn_Button.Click +=
                 new EventHandler(logIn_Button_Click);
             back_Button.Click +=
