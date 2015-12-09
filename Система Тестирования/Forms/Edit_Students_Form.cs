@@ -466,6 +466,8 @@ namespace Система_Тестирования
             {
                 rowIndex = 0;
                 OutputDataToForm(rowIndex);
+                toolStripButton3.Enabled = true;
+                toolStripButton2.Enabled = false;
             }
             else
             {
@@ -473,43 +475,100 @@ namespace Система_Тестирования
                 currentFoundedIndex = 0;
                 rowIndex = foundedRowsIndexes[currentFoundedIndex];
                 OutputDataToForm(rowIndex);
+                toolStripButton3.Enabled = true;
+                toolStripButton2.Enabled = false;
             }
         }
         // Нажатие на кнопку перехода К предыдущей записи 
         private void toolStrip_Previous_Button_Click(object sender, EventArgs e)
         {
-            if(!Properties.Settings.Default.IsSearching)
-                OutputDataToForm(--rowIndex);
+            ToolStripButton thisTSB = sender as ToolStripButton;
+            ToolStripButton tSB = sender as ToolStripButton;
+            if (!Properties.Settings.Default.IsSearching)
+            {
+                if (rowIndex == 1)
+                {
+                    OutputDataToForm(--rowIndex);
+                    toolStripButton3.Enabled = true;
+                    thisTSB.Enabled = false;
+                }
+                else if (rowIndex != 0)
+                {
+                    OutputDataToForm(--rowIndex);
+                    toolStripButton3.Enabled = true;
+                }
+
+                else
+                {
+                    thisTSB.Enabled = false;
+                }
+            }
             else
             {
-                if (currentFoundedIndex != 0)
+                if (currentFoundedIndex == 1)
                 {
                     rowIndex = foundedRowsIndexes[--currentFoundedIndex];
                     OutputDataToForm(rowIndex);
+                    thisTSB.Enabled = false;
+                    toolStripButton3.Enabled = true;
+                }
+                else if (currentFoundedIndex != 0)
+                {
+                    rowIndex = foundedRowsIndexes[--currentFoundedIndex];
+                    OutputDataToForm(rowIndex);
+                    toolStripButton3.Enabled = true;
                 }
                 else
                 {
-                    rowIndex = foundedRowsIndexes[foundedRowsIndexes.Length - 1];
+                    //rowIndex = foundedRowsIndexes[foundedRowsIndexes.Length - 1];
                     OutputDataToForm(rowIndex);
+                    thisTSB.Enabled = false;
                 }
             }
         }
         // Нажатие на кнопку перехода К следующей записи 
         private void toolStrip_Next_Button_Click(object sender, EventArgs e)
         {
+            ToolStripButton thisTSB = sender as ToolStripButton;
             if (!Properties.Settings.Default.IsSearching)
-                OutputDataToForm(++rowIndex);
+            {
+                if (rowIndex == studentsTable.Rows.Count - 2)
+                {
+                    OutputDataToForm(++rowIndex);
+                    toolStripButton2.Enabled = true;
+                    thisTSB.Enabled = false;
+                }
+                else if (rowIndex != studentsTable.Rows.Count - 1)
+                {
+                    OutputDataToForm(++rowIndex);
+                    toolStripButton2.Enabled = true;
+                }
+
+                else
+                {
+                    thisTSB.Enabled = false;
+                }
+            }
             else
             {
-                if (currentFoundedIndex != foundedRowsIndexes.Length - 1)
+                if (currentFoundedIndex == foundedRowsIndexes.Length - 2)
                 {
                     rowIndex = foundedRowsIndexes[++currentFoundedIndex];
                     OutputDataToForm(rowIndex);
+                    thisTSB.Enabled = false;
+                    toolStripButton2.Enabled = true;
+                }
+                else if (currentFoundedIndex != foundedRowsIndexes.Length - 1)
+                {
+                    rowIndex = foundedRowsIndexes[++currentFoundedIndex];
+                    OutputDataToForm(rowIndex);
+                    toolStripButton2.Enabled = true;
                 }
                 else
                 {
-                    rowIndex = foundedRowsIndexes[0];
+                    //rowIndex = foundedRowsIndexes[0];
                     OutputDataToForm(rowIndex);
+                    thisTSB.Enabled = false;
                 }
             }
         }
@@ -520,6 +579,8 @@ namespace Система_Тестирования
             {
                 rowIndex = studentsTable.Rows.Count - 1;
                 OutputDataToForm(rowIndex);
+                toolStripButton2.Enabled = true;
+                toolStripButton3.Enabled = false;
             }
             else
             {
@@ -527,6 +588,8 @@ namespace Система_Тестирования
                 currentFoundedIndex = foundedRowsIndexes.Length - 1;
                 rowIndex = foundedRowsIndexes[currentFoundedIndex];
                 OutputDataToForm(rowIndex);
+                toolStripButton2.Enabled = true;
+                toolStripButton3.Enabled = false;
             }
         }
         // При изменении свойства Text элемента toolStripTextBox1 (отображается номер текущей записи)
