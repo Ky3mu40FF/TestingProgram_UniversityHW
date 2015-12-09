@@ -100,11 +100,20 @@
     <Compile Include="Forms\Student_Form.Designer.cs">
       <DependentUpon>Student_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ServerMainUserAuth.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ServerMainUserAuth.Designer.cs">
+      <DependentUpon>ServerMainUserAuth.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms\Edit_Questions_Form.resx">
       <DependentUpon>Edit_Questions_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Edit_Students_Form.resx">
       <DependentUpon>Edit_Students_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ServerMainUserAuth.resx">
+      <DependentUpon>ServerMainUserAuth.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StudentsEditingForms\Add_Student_Form.resx">
       <DependentUpon>Add_Student_Form.cs</DependentUpon>

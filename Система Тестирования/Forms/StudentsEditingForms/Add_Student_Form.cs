@@ -79,7 +79,7 @@ namespace Система_Тестирования
             try
             {
                 Int32 newLoginID = Int32.Parse(loginTable.Rows[loginTable.Rows.Count - 1]["LoginID"].ToString()) + 1;
-                Int32 newStudentID = Int32.Parse(studentsTable.Rows[studentsTable.Rows.Count - 1]["StudentID"].ToString()) + 1;
+                Int32 newStudentID = Int32.Parse(studentsTable.Rows[studentsTable.Rows.Count - 1]["StudentsID"].ToString()) + 1;
 
                 /*
                 MD5 md5Hash = MD5.Create();
