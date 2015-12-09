@@ -34,6 +34,7 @@ namespace Система_Тестирования
 
         Int32 numOfCorrectlyAnsweredQuestions;
         Int32 mark;
+        Int32 isTestPassed; // Принимает значения 0 и 1
 
         enum QuestionType
         {
@@ -88,7 +89,7 @@ namespace Система_Тестирования
                 "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if (result == DialogResult.Yes)
             {
-                Application.Exit();
+                Environment.Exit(0);
             }
             else
             {
@@ -108,6 +109,7 @@ namespace Система_Тестирования
             numOfAnswers = 0;
             numOfCorrectlyAnsweredQuestions = 0;
             PreparePanelForQuestion();
+            ChangeColorDependingOnAnswer(PanelColorsState.Neutral);
 
             next_Button.Text = "Дальше";
             next_Button.Enabled = false;
@@ -140,7 +142,7 @@ namespace Система_Тестирования
                 thisBtn.Enabled = false;
                 answer_Button.Enabled = true;
 
-                if (questionCounter == numOfTakenQuestions - 2)
+                if (questionCounter == numOfTakenQuestions - 1)
                 {
                     thisBtn.Text = "Закончить";
                 }
@@ -261,6 +263,7 @@ namespace Система_Тестирования
                 courseNum_Label.Text = infoReader["Course"].ToString();
                 testPassed_Label.Text = infoReader["IsTestPassed"].ToString();
                 lastMark_Label.Text = infoReader["Mark"].ToString();
+                numOfCorrectAnswers_Label.Text = infoReader["NumOfCorrectAnswers"].ToString();
                 numOfRetries_Label.Text = infoReader["NumOfRetries"].ToString();
             }
             infoReader.Close();
@@ -279,9 +282,11 @@ namespace Система_Тестирования
             SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
 
-            table.Rows[studentID]["IsTestPassed"] = 1;
+            //table.Rows[studentID]["IsTestPassed"] = 1;
+            table.Rows[studentID]["IsTestPassed"] = isTestPassed;
             table.Rows[studentID]["Mark"] = mark;
-            table.Rows[studentID]["NumOfRetries"] = (Int32.Parse(studentInfo[9]) + 1);
+            table.Rows[studentID]["NumOfCorrectAnswers"] = numOfCorrectlyAnsweredQuestions;
+            table.Rows[studentID]["NumOfRetries"] = (Int32.Parse(studentInfo[10]) + 1);
 
             adapter.Update(table);
         }
@@ -390,7 +395,9 @@ namespace Система_Тестирования
                         RadioButton answerOption = new RadioButton();
                         answerOption.Text = answers[i];
                         answerOption.Tag = answersNums[i];
-                        answerOption.AutoSize = true;
+                        answerOption.AutoSize = false;
+                        answerOption.Size = new Size(399, 51);
+                        answerOption.MaximumSize = new Size(399,51);
                         flowLayoutPanel1.Controls.Add(answerOption);
                     }
                     break;
@@ -400,10 +407,12 @@ namespace Система_Тестирования
                         CheckBox answerOption = new CheckBox();
                         answerOption.Text = answers[i];
                         answerOption.Tag = answersNums[i];
-                        answerOption.AutoSize = true;
+                        answerOption.AutoSize = false;
+                        answerOption.Size = new Size(399, 51);
+                        answerOption.MaximumSize = new Size(399, 51);
                         // Эксперимент. Нужно, чтобы при получении значений CheckBox'ы 
                         // не пришлось заново сортировать их для сравнения с правильными ответами
-                    // ПЕРЕФОРМУЛИРОВАТЬ ЭТОТ КОММЕНТАРИЙ!
+                        // ПЕРЕФОРМУЛИРОВАТЬ ЭТОТ КОММЕНТАРИЙ!
                         answerOption.TabIndex = answersNums[i];
                         flowLayoutPanel1.Controls.Add(answerOption);
                     }
@@ -416,13 +425,25 @@ namespace Система_Тестирования
             float percentOfCorrectAnswers = 0;
             percentOfCorrectAnswers = numOfCorrectlyAnsweredQuestions * 100 / numOfTakenQuestions;
             if (percentOfCorrectAnswers >= 90.0f)
+            {
                 mark = 5;
+                isTestPassed = 1;
+            }
             else if (percentOfCorrectAnswers >= 80.0f && percentOfCorrectAnswers < 90.0f)
+            {
                 mark = 4;
+                isTestPassed = 1;
+            }
             else if (percentOfCorrectAnswers >= 70.0f && percentOfCorrectAnswers < 80.0f)
+            {
                 mark = 3;
+                isTestPassed = 1;
+            }
             else
+            {
                 mark = 2;
+                isTestPassed = 0;
+            }
         }
 
         private void ChangeColorDependingOnAnswer(PanelColorsState colState)

@@ -73,16 +73,15 @@
             this.questionPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.questionPanel.Location = new System.Drawing.Point(0, 0);
             this.questionPanel.Name = "questionPanel";
-            this.questionPanel.Size = new System.Drawing.Size(691, 108);
+            this.questionPanel.Size = new System.Drawing.Size(807, 108);
             this.questionPanel.TabIndex = 0;
             // 
             // questionContent_Label
             // 
-            this.questionContent_Label.AutoSize = true;
             this.questionContent_Label.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.questionContent_Label.Location = new System.Drawing.Point(22, 27);
+            this.questionContent_Label.Location = new System.Drawing.Point(3, 27);
             this.questionContent_Label.Name = "questionContent_Label";
-            this.questionContent_Label.Size = new System.Drawing.Size(39, 15);
+            this.questionContent_Label.Size = new System.Drawing.Size(799, 77);
             this.questionContent_Label.TabIndex = 1;
             this.questionContent_Label.Text = "label2";
             this.questionContent_Label.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -92,7 +91,7 @@
             this.questionNumber_Label.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.questionNumber_Label.AutoSize = true;
             this.questionNumber_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.questionNumber_Label.Location = new System.Drawing.Point(313, 8);
+            this.questionNumber_Label.Location = new System.Drawing.Point(371, 8);
             this.questionNumber_Label.Name = "questionNumber_Label";
             this.questionNumber_Label.Size = new System.Drawing.Size(81, 16);
             this.questionNumber_Label.TabIndex = 0;
@@ -107,14 +106,14 @@
             this.answersPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.answersPanel.Location = new System.Drawing.Point(0, 108);
             this.answersPanel.Name = "answersPanel";
-            this.answersPanel.Size = new System.Drawing.Size(691, 182);
+            this.answersPanel.Size = new System.Drawing.Size(807, 292);
             this.answersPanel.TabIndex = 1;
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 31);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(684, 146);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(799, 256);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // label1
@@ -122,7 +121,7 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(288, 9);
+            this.label1.Location = new System.Drawing.Point(346, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(137, 16);
             this.label1.TabIndex = 0;
@@ -130,7 +129,7 @@
             // 
             // next_Button
             // 
-            this.next_Button.Location = new System.Drawing.Point(604, 296);
+            this.next_Button.Location = new System.Drawing.Point(720, 406);
             this.next_Button.Name = "next_Button";
             this.next_Button.Size = new System.Drawing.Size(75, 23);
             this.next_Button.TabIndex = 2;
@@ -139,7 +138,7 @@
             // 
             // answer_Button
             // 
-            this.answer_Button.Location = new System.Drawing.Point(307, 296);
+            this.answer_Button.Location = new System.Drawing.Point(375, 406);
             this.answer_Button.Name = "answer_Button";
             this.answer_Button.Size = new System.Drawing.Size(75, 23);
             this.answer_Button.TabIndex = 4;
@@ -154,12 +153,12 @@
             this.firstPanel.Controls.Add(this.groupBox1);
             this.firstPanel.Location = new System.Drawing.Point(0, 0);
             this.firstPanel.Name = "firstPanel";
-            this.firstPanel.Size = new System.Drawing.Size(691, 339);
+            this.firstPanel.Size = new System.Drawing.Size(807, 442);
             this.firstPanel.TabIndex = 5;
             // 
             // exit_Button
             // 
-            this.exit_Button.Location = new System.Drawing.Point(15, 296);
+            this.exit_Button.Location = new System.Drawing.Point(15, 406);
             this.exit_Button.Name = "exit_Button";
             this.exit_Button.Size = new System.Drawing.Size(150, 23);
             this.exit_Button.TabIndex = 3;
@@ -168,7 +167,7 @@
             // 
             // start_Button
             // 
-            this.start_Button.Location = new System.Drawing.Point(529, 296);
+            this.start_Button.Location = new System.Drawing.Point(645, 406);
             this.start_Button.Name = "start_Button";
             this.start_Button.Size = new System.Drawing.Size(150, 23);
             this.start_Button.TabIndex = 2;
@@ -185,9 +184,9 @@
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Location = new System.Drawing.Point(350, 12);
+            this.groupBox2.Location = new System.Drawing.Point(391, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(329, 122);
+            this.groupBox2.Size = new System.Drawing.Size(404, 122);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Статистика";
@@ -280,7 +279,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(15, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(329, 122);
+            this.groupBox1.Size = new System.Drawing.Size(377, 122);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Информация о студенте";
@@ -365,7 +364,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(691, 339);
+            this.ClientSize = new System.Drawing.Size(807, 441);
             this.Controls.Add(this.firstPanel);
             this.Controls.Add(this.answer_Button);
             this.Controls.Add(this.next_Button);
